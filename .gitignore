@@ -33,9 +33,25 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# credentials
+**/credentials.json
+credentials.json
+
+# logs with sensitive data
+logs/
+*.log
+
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.clinerules/byterover-rules.md
+.kilocode/rules/byterover-rules.md
+.roo/rules/byterover-rules.md
+.windsurf/rules/byterover-rules.md
+.cursor/rules/byterover-rules.mdc
+.kiro/steering/byterover-rules.md
+.qoder/rules/byterover-rules.md
+.augment/rules/byterover-rules.md

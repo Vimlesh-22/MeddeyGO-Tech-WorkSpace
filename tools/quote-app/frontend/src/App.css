@@ -1,0 +1,16 @@
+/* Remove old styles as we're using Tailwind CSS */
+/* Add any specific custom styles here that can't be easily created with Tailwind */
+
+/* Animation for logo spin */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  animation: spin 2s linear infinite;
+}

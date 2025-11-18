@@ -1,0 +1,28 @@
+{
+    "zencoder.mcpServers": {
+        "playwright": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@playwright/mcp@latest",
+                "--isolated",
+                "--headless",
+                "--browser",
+                "firefox",
+                "--user-agent",
+                "\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.112 Safari/537.36\""
+            ]
+        }
+    },
+    "mcpServers": {
+      "TestSprite": {
+        "command": "npx",
+        "args": [
+          "@testsprite/testsprite-mcp@latest"
+        ],
+        "env": {
+          "API_KEY": "sk-user-DPxVh9HFLGnNxR5PZAj3gn7WMDXcPKZw6n9KMWFmJOKY_arMzQK7PUiA15_0qeIYp0008GDJB2s_locbNzyfF-SWWerf0Hao7cZbTMG46NqhjKysrnAdK5Ts_rppVoPL5Zo"
+        }
+      }
+    }
+}

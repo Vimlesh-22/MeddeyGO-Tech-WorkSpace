@@ -1,103 +1,104 @@
+import { Suspense } from "react";
 import Image from "next/image";
+import { redirect } from "next/navigation";
+import { projects } from "@/data/projects";
+import { ProjectExplorer, type CategoryOption } from "@/components/project-explorer";
+import { HeaderBar } from "@/components/HeaderBar";
+import { getSessionUserFromCookies } from "@/lib/auth/session";
+import { ensureDefaultAdmin } from "@/lib/auth/bootstrap";
+import { TourWrapper } from "@/components/welcome/TourWrapper";
 
-export default function Home() {
+const categoryLabels = {
+  automation: "Automation",
+  data: "Data Tools",
+  quotations: "Quotations",
+  ai: "AI Assistants",
+} as const;
+
+const baseCategories = Array.from(
+  new Set(projects.map((project) => project.category)),
+) as (keyof typeof categoryLabels)[];
+
+const categories: CategoryOption[] = [
+  { value: "all", label: "All apps" },
+  ...baseCategories.map((value) => ({
+    value,
+    label: categoryLabels[value],
+  })),
+];
+
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  await ensureDefaultAdmin();
+  
+  const sessionUser = await getSessionUserFromCookies();
+  if (!sessionUser) {
+    redirect("/login");
+  }
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
+        {/* Welcome Tour */}
+      <TourWrapper userId={sessionUser.id} userEmail={sessionUser.email} />
+      
+      {/* Theme gradients - visible on both themes */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.15),_transparent_55%)] dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_55%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,_rgba(244,114,182,0.06),_transparent_55%)] dark:bg-[radial-gradient(circle_at_20%_80%,_rgba(244,114,182,0.08),_transparent_55%)]" />
+      
+      <main className="relative mx-auto flex min-h-screen max-w-6xl flex-col gap-10 px-6 pb-24 pt-16 sm:px-10 lg:px-16">
+        <HeaderBar />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+        <header className="flex flex-col gap-8">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex flex-col gap-4 flex-1">
+              <span className="w-fit rounded-full border border-border bg-muted/50 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
+                MeddeyGo Automation
+              </span>
+              <h1 className="text-4xl font-semibold leading-tight text-foreground md:text-5xl lg:text-[52px]">
+                Welcome back, {sessionUser.displayName ?? sessionUser.email}
+              </h1>
+              <p className="max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
+                Centralize access to every productivity tool in your toolkit. Consistent theme experiences.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col gap-6 rounded-2xl border border-border bg-card/60 p-6 backdrop-blur">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              <strong className="rounded-full bg-emerald-500/10 px-3 py-1 text-emerald-600 dark:text-emerald-400">
+                {projects.length} curated apps
+              </strong>
+              <span className="flex items-center gap-2 rounded-full bg-sky-500/10 px-3 py-1 text-sky-600 dark:text-sky-400">
+                <Image
+                  src="https://meddey.com/cdn/shop/files/Meddey_1_a9e7c93d-6b1b-4d73-b4cb-bb110a73204f.png"
+                  alt="MeddeyGo"
+                  width={16}
+                  height={16}
+                  className="h-4 w-auto"
+                />
+                Powered By MeddeyGo
+              </span>
+              <span className="rounded-full bg-fuchsia-500/10 px-3 py-1 text-fuchsia-600 dark:text-fuchsia-400">
+                Animated interactions
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {categories.map((category) => (
+                <div
+                  key={`nav-${category.value}`}
+                  className="rounded-full border border-border bg-muted/50 px-3 py-1 text-xs uppercase tracking-wide text-muted-foreground"
+                >
+                  {category.label}
+                </div>
+              ))}
+            </div>
+          </div>
+        </header>
+
+        <Suspense fallback={<div className="text-muted-foreground">Loading apps…</div>}>
+          <ProjectExplorer projects={projects} categories={categories} />
+        </Suspense>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }

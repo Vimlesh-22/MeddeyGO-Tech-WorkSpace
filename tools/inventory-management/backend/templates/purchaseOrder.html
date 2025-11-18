@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Order</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            padding: 20px;
+            background: white;
+        }
+
+        .invoice-container {
+            width: 100%;
+            background: white;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo {
+            height: 40px;
+            object-fit: contain;
+            margin-right: 20px;
+        }
+
+        .invoice-details {
+            text-align: right;
+        }
+
+        .invoice-title {
+            font-size: 24px;
+            color: #2196F3;
+            margin-bottom: 5px;
+        }
+
+        .invoice-number, .invoice-date {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .info-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .vendor-details, .client-details {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2196F3;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .info-row {
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .info-label {
+            color: #666;
+            flex: 0 0 80px;
+            padding-right: 10px;
+        }
+
+        .info-value {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .items-table th {
+            background: #2196F3;
+            color: white;
+            text-align: left;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .items-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .items-table .order-reference {
+            font-size: 12px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .total-section {
+            text-align: right;
+            margin: 20px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .notes {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .notes p {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .thank-you {
+            font-size: 14px;
+            color: #2196F3;
+        }
+
+        .signature {
+            text-align: right;
+        }
+
+        .signature-line {
+            margin-top: 30px;
+            border-top: 1px solid #000;
+            width: 200px;
+            display: inline-block;
+        }
+
+        @media print {
+            body {
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="header">
+            <img src="https://meddey.com/cdn/shop/files/Meddey_1_a9e7c93d-6b1b-4d73-b4cb-bb110a73204f.png" alt="Meddey Logo" class="logo">
+            <div class="invoice-details">
+                <div class="invoice-title">PURCHASE ORDER</div>
+                <div class="invoice-number">Purchase #: <%- poNumber %></div>
+                <div class="invoice-date">Date: <%- date %></div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="vendor-details">
+                <div class="section-title">Vendor Details</div>
+                <div class="info-row">
+                    <span class="info-label">Company:</span>
+                    <span class="info-value"><%- vendor.name %></span>
+                </div>
+                <% if (vendor.contactInfo) { %>
+                    <% if (vendor.contactInfo.address) { %>
+                        <div class="info-row">
+                            <span class="info-label">Address:</span>
+                            <span class="info-value"><%- vendor.contactInfo.address %></span>
+                        </div>
+                    <% } %>
+                    <% if (vendor.contactInfo.email) { %>
+                        <div class="info-row">
+                            <span class="info-label">Email:</span>
+                            <span class="info-value"><%- vendor.contactInfo.email %></span>
+                        </div>
+                    <% } %>
+                    <% if (vendor.contactInfo.phone) { %>
+                        <div class="info-row">
+                            <span class="info-label">Phone:</span>
+                            <span class="info-value"><%- vendor.contactInfo.phone %></span>
+                        </div>
+                    <% } %>
+                <% } %>
+            </div>
+
+            <div class="client-details">
+                <div class="section-title">Client Details</div>
+                <div class="info-row">
+                    <span class="info-label">Company:</span>
+                    <span class="info-value"><%- (clientDetails && clientDetails.company) ? clientDetails.company : 'Meddey Technologies Pvt Ltd' %></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Address:</span>
+                    <span class="info-value"><%- (clientDetails && clientDetails.address) ? clientDetails.address.replace(/\n/g, '<br>') : 'C-75, First Floor, DDA Sheds, Pocket A,<br>Okhla Phase I, Okhla Industrial Estate,<br>New Delhi, Delhi 110020' %></span>
+                </div>
+                <% if (clientDetails && clientDetails.gstin) { %>
+                <div class="info-row">
+                    <span class="info-label">GSTIN:</span>
+                    <span class="info-value"><%- clientDetails.gstin %></span>
+                </div>
+                <% } %>
+                <% if (clientDetails && clientDetails.md) { %>
+                <div class="info-row">
+                    <span class="info-label">MD42:</span>
+                    <span class="info-value"><%- clientDetails.md %></span>
+                </div>
+                <% } %>
+                <% if (clientDetails && clientDetails.contact) { %>
+                <div class="info-row">
+                    <span class="info-label">Contact:</span>
+                    <span class="info-value"><%- clientDetails.contact %></span>
+                </div>
+                <% } %>
+                <% if (clientDetails && clientDetails.email) { %>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value"><%- clientDetails.email %></span>
+                </div>
+                <% } %>
+                <% if (clientDetails && clientDetails.phone) { %>
+                <div class="info-row">
+                    <span class="info-label">Phone:</span>
+                    <span class="info-value"><%- clientDetails.phone %></span>
+                </div>
+                <% } %>
+                <div class="info-row">
+                    <span class="info-label">Warehouse:</span>
+                    <span class="info-value"><%- (typeof selectedWarehouse !== 'undefined') ? selectedWarehouse : 'Okhla' %></span>
+                </div>
+            </div>
+        </div>
+
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th style="width: 40%">Item Description</th>
+                    <th style="width: 20%">SKU</th>
+                    <th style="width: 15%">Size</th>
+                    <th style="width: 25%">Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (vendorItems && vendorItems.length > 0) { %>
+                    <% vendorItems.forEach(function(item) { %>
+                        <tr>
+                            <td>
+                                <%- item.productName %>
+                                <% if (item.variantName && !item.size) { %>
+                                    - <%- item.variantName %>
+                                <% } %>
+                                <% if (item.orderNames && item.orderNames.length > 0) { %>
+                                    <!-- <div class="order-reference">
+                                        Orders: <%- item.orderNames.join(', ') %>
+                                    </div> -->
+                                <% } %>
+                            </td>
+                            <td><%- item.sku %></td>
+                            <td><%- item.size || '-' %></td>
+                            <td><%- item.quantity %></td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="4" style="text-align: center;">No items found</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+
+        <div class="total-section">
+            Total Items: <%- vendorItems ? vendorItems.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0) : 0 %>
+        </div>
+
+        <div class="footer">
+            <div class="thank-you">Thank you for your business!</div>
+            <div class="signature">
+                <div>Authorized Signature</div>
+                <div class="signature-line"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

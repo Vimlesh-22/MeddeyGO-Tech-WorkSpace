@@ -1,0 +1,8 @@
+{
+  "inventory-management": {
+    "port": 4096
+  },
+  "quote-generator": {
+    "port": 4094
+  }
+}

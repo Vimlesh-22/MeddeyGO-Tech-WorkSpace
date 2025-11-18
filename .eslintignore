@@ -1,0 +1,57 @@
+# Build outputs
+.next/
+out/
+dist/
+build/
+*.min.js
+*.bundle.js
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Generated files
+*.tsbuildinfo
+.next/
+.turbo/
+
+# Tool-specific build outputs
+tools/**/dist/
+tools/**/build/
+tools/**/.next/
+tools/**/out/
+
+# Logs
+logs/
+*.log
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Other
+.DS_Store
+*.swp
+*.swo
+*~
+

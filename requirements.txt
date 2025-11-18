@@ -1,0 +1,45 @@
+# Python dependencies for all tools in project-hub
+# All applications use this shared requirements file
+# DO NOT create per-tool requirements.txt - all dependencies must be listed here
+
+# Core frameworks
+streamlit>=1.28.0
+flask==2.3.3
+flask-cors>=4.0.0
+werkzeug==2.3.7
+gunicorn>=21.2.0
+
+# Additional Flask utilities
+flask-compress>=1.14
+
+# Data processing
+pandas>=2.1.0
+numpy>=1.24.0
+openpyxl==3.1.2
+xlrd>=2.0.0
+
+# Google Sheets integration
+gspread==5.12.0
+google-auth==2.23.3
+google-auth-oauthlib==1.1.0
+google-auth-httplib2==0.1.1
+google-api-python-client==2.108.0
+
+# String matching
+thefuzz[speedup]==0.22.1
+
+# Utilities
+python-dotenv==1.0.0
+python-dateutil==2.8.2
+
+# Database
+mysql-connector-python>=8.0.33
+pymongo>=4.5.0
+
+# Deployment (optional)
+vercel==0.2.1
+serverless-wsgi==3.0.1
+
+# Additional tools dependencies
+requests>=2.31.0
+urllib3>=2.0.0

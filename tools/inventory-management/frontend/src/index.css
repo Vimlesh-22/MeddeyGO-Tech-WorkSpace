@@ -1,0 +1,413 @@
+/* Project Hub Theme - Light Mode (Default) */
+:root {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Light Theme Colors */
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --primary: #0f172a;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #94a3b8;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f172a;
+  --sidebar-border: #e2e8f0;
+  --hover-color: #38bdf8;
+}
+
+/* Dark Theme */
+.dark {
+  /* Premium dark: near-black slate with cyan accents */
+  --background: #020617; /* slate-950 */
+  --foreground: #e6f1ff; /* very light bluish */
+  --card: #0b1220; /* deeper panel */
+  --card-foreground: #e6f1ff;
+  --primary: #38bdf8; /* sky-400 */
+  --primary-foreground: #021018;
+  --secondary: #0f1a2a; /* subtle blue slate */
+  --secondary-foreground: #dbeafe;
+  --muted: #0e1726; /* hover rows */
+  --muted-foreground: #9fb3c8;
+  --accent: #0e1726;
+  --accent-foreground: #e6f1ff;
+  --border: #1e2a3a; /* thin cool border */
+  --input: #1e2a3a;
+  --ring: #3b82f6; /* blue ring */
+  --sidebar: #0b1220;
+  --sidebar-foreground: #e6f1ff;
+  --sidebar-border: #1e2a3a;
+  --hover-color: #22d3ee; /* cyan-300 */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: var(--hover-color);
+  transition: color 0.2s ease;
+}
+
+/* Material-UI Theme Overrides */
+.MuiButton-root {
+  text-transform: none !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
+}
+
+.MuiButton-sizeSmall {
+  height: 32px !important;
+}
+
+.MuiButton-sizeMedium {
+  height: 40px !important;
+}
+
+.MuiButton-sizeLarge {
+  height: 48px !important;
+}
+
+.MuiStack-root .MuiButton-root {
+  margin: 0 !important;
+}
+
+/* Responsive actions row - allow wrapping */
+.MuiStack-root[role='row'],
+.MuiStack-root[style*='mb: 3'] {
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+@media (max-width: 900px) {
+  .MuiButton-root {
+    min-width: 112px;
+  }
+}
+
+@media (max-width: 600px) {
+  .MuiButton-root {
+    min-width: 96px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+/* Ensure text visibility in both themes */
+* {
+  color: inherit;
+}
+
+/* MUI Components Theme Adaptation */
+.MuiPaper-root {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+}
+
+.MuiAppBar-root {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.MuiDrawer-paper {
+  background-color: var(--sidebar) !important;
+  color: var(--sidebar-foreground) !important;
+  border-right: 1px solid var(--sidebar-border) !important;
+}
+
+.MuiListItemButton-root.Mui-selected {
+  background-color: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
+.MuiListItemButton-root:hover {
+  background-color: var(--muted) !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border) !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--ring) !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--primary) !important;
+}
+
+.MuiInputLabel-root {
+  color: var(--muted-foreground) !important;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  color: var(--primary) !important;
+}
+
+.MuiDialog-root .MuiDialog-paper {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+}
+
+.MuiChip-root {
+  background-color: var(--muted) !important;
+  color: var(--muted-foreground) !important;
+}
+
+.MuiTab-root {
+  color: var(--muted-foreground) !important;
+}
+
+.MuiTab-root.Mui-selected {
+  color: var(--primary) !important;
+}
+
+.MuiSwitch-root .MuiSwitch-switchBase.Mui-checked {
+  color: var(--primary) !important;
+}
+
+.MuiSwitch-root .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: var(--primary) !important;
+  opacity: 0.5 !important;
+}
+
+.MuiAlert-root {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+}
+
+.MuiCircularProgress-root {
+  color: var(--primary) !important;
+}
+
+/* Table Components */
+.MuiTable-root {
+  background-color: var(--background) !important;
+}
+
+.MuiTableHead-root {
+  background-color: var(--muted) !important;
+}
+
+.MuiTableHead-root .MuiTableCell-root {
+  color: var(--foreground) !important;
+  font-weight: 600 !important;
+}
+
+.MuiTableBody-root .MuiTableCell-root {
+  color: var(--foreground) !important;
+  border-bottom-color: var(--border) !important;
+}
+
+.MuiTableRow-root:hover {
+  background-color: var(--muted) !important;
+}
+
+/* Chip Components */
+.MuiChip-label {
+  color: var(--muted-foreground) !important;
+}
+
+.MuiChip-colorPrimary {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+}
+
+.MuiChip-colorSecondary {
+  background-color: var(--secondary) !important;
+  color: var(--secondary-foreground) !important;
+}
+
+/* Typography */
+.MuiTypography-root {
+  color: var(--foreground) !important;
+}
+
+.MuiTypography-colorTextSecondary {
+  color: var(--muted-foreground) !important;
+}
+
+/* Icon Buttons */
+.MuiIconButton-root {
+  color: var(--foreground) !important;
+}
+
+.MuiIconButton-root:hover {
+  background-color: var(--muted) !important;
+}
+
+/* Select/Dropdown */
+.MuiSelect-select {
+  color: var(--foreground) !important;
+  background-color: var(--background) !important;
+}
+
+.MuiSelect-icon {
+  color: var(--muted-foreground) !important;
+}
+
+.MuiMenuItem-root {
+  color: var(--foreground) !important;
+  background-color: var(--background) !important;
+}
+
+.MuiMenuItem-root:hover {
+  background-color: var(--muted) !important;
+}
+
+/* Autocomplete */
+.MuiAutocomplete-inputRoot {
+  color: var(--foreground) !important;
+}
+
+.MuiAutocomplete-paper {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+}
+
+/* Tooltip */
+.MuiTooltip-tooltip {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* Snackbar */
+.MuiSnackbar-root .MuiSnackbarContent-root {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+}
+
+/* Divider */
+.MuiDivider-root {
+  border-color: var(--border) !important;
+}
+
+/* Checkbox */
+.MuiCheckbox-root {
+  color: var(--muted-foreground) !important;
+}
+
+.MuiCheckbox-root.Mui-checked {
+  color: var(--primary) !important;
+}
+
+/* Form Control Label */
+.MuiFormControlLabel-label {
+  color: var(--foreground) !important;
+}
+
+/* Ensure main content area has proper background */
+.MuiBox-root {
+  color: var(--foreground) !important;
+}
+
+/* Paper components */
+.MuiPaper-elevation1 {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+}
+
+.MuiPaper-elevation2 {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+}
+
+.MuiPaper-elevation3 {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+}
+
+/* Additional component visibility fixes */
+.MuiCard-root {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+}
+
+.MuiCardContent-root {
+  color: var(--card-foreground) !important;
+}
+
+/* Ensure all text inputs are visible */
+.MuiOutlinedInput-input {
+  color: var(--foreground) !important;
+}
+
+.MuiInputBase-input {
+  color: var(--foreground) !important;
+}
+
+/* List items */
+.MuiListItemText-primary {
+  color: var(--foreground) !important;
+}
+
+.MuiListItemText-secondary {
+  color: var(--muted-foreground) !important;
+}
+
+/* Ensure buttons have proper contrast */
+.MuiButton-contained {
+  color: var(--primary-foreground) !important;
+}
+
+.MuiButton-outlined {
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.MuiButton-text {
+  color: var(--foreground) !important;
+}
+
+/* Popover/Menu */
+.MuiPopover-paper {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+}
+
+.MuiMenu-paper {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+}
+
+/* Ensure proper contrast for all interactive elements */
+button, a, input, select, textarea {
+  color: inherit;
+}
+
+/* Smooth transitions for theme changes on key elements */
+body, .MuiPaper-root, .MuiAppBar-root, .MuiDrawer-paper, .MuiCard-root {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
