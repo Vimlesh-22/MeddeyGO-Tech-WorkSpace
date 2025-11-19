@@ -4,6 +4,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
+  "rootDirectory": ".",
   "regions": ["iad1"],
   "functions": {
     "app/api/**/*.ts": {
