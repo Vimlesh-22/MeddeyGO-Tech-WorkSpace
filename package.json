@@ -27,10 +27,7 @@
     "workspace": "npm run dev",
     "cleanup:uploads": "node scripts/cleanup-uploads.mjs",
     "cleanup:logs": "node scripts/cleanup-logs.js",
-    "cleanup:all": "npm run cleanup:uploads && npm run cleanup:logs",
-    "postinstall": "echo 'Installation complete - skipping Python deps and projecthub setup'",
-    "install:python-deps": "pip install -r requirements.txt",
-    "setup:projecthub": "cd projecthub && npm link"
+    "cleanup:all": "npm run cleanup:uploads && npm run cleanup:logs"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
