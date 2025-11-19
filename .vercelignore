@@ -8,3 +8,7 @@ dist
 requirements.txt
 *.py
 __pycache__
+projecthub
+tools/*/backend/node_modules
+tools/*/frontend/node_modules
+tools/*/client/node_modules

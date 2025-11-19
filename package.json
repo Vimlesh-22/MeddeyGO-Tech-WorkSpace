@@ -2,14 +2,6 @@
   "name": "meddey-tech-workspace",
   "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "projecthub",
-    "tools/quote-app/backend",
-    "tools/quote-app/frontend",
-    "tools/inventory-management/backend",
-    "tools/inventory-management/frontend",
-    "tools/GSHEET/client"
-  ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently --names \"HUB,QUOTE,INVENTORY,GSHEET\" \"npm run dev:hub\" \"npm run dev:quote\" \"npm run dev:inventory\" \"npm run dev:gsheet\"",
     "dev:hub": "cross-env NODE_ENV=development next dev --turbopack -p 4090",
