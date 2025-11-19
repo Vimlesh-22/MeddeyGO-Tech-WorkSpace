@@ -2,13 +2,13 @@
  * Domain Configuration Utility for MeddeyGo Workspace
  * 
  * Priority Order:
- * 1. Production: DOMAIN from env (required, NO localhost/IP fallback)
+ * 1. Production: DOMAIN/NEXT_PUBLIC_BASE_URL from env (VERCEL_URL fallback allowed)
  * 2. Development: DOMAIN from env (if set)
  * 3. Development Fallback: localhost or network IP (automatically enabled in dev mode)
  * 
  * Behavior:
  * - Development mode (NODE_ENV=development): Automatically uses localhost/IP if no domain set
- * - Production mode (NODE_ENV=production): REQUIRES domain, NEVER allows localhost/IP
+ * - Production mode (NODE_ENV=production): Requires configured domain, allows VERCEL_URL fallback, NEVER allows localhost/IP
  * 
  * Usage:
  * - Always use getBaseUrl() to get the current base URL
@@ -75,15 +75,28 @@ export function isLocalFallbackEnabled(): boolean {
 export function getBaseUrl(): string {
   const domain = process.env.DOMAIN;
   const nextPublicUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const vercelUrl = process.env.VERCEL_URL;
+
+  const getVercelFallback = () => {
+    if (!vercelUrl) return null;
+    const withProtocol = /^https?:\/\//.test(vercelUrl)
+      ? vercelUrl
+      : `https://${vercelUrl}`;
+    console.warn(
+      "[DOMAIN] DOMAIN/NEXT_PUBLIC_BASE_URL not set. Using VERCEL_URL fallback:",
+      withProtocol,
+    );
+    return withProtocol;
+  };
   
   // Production mode: MUST have domain
   if (isProduction()) {
-    if (!domain && !nextPublicUrl) {
+    if (!domain && !nextPublicUrl && !vercelUrl) {
       throw new Error(
         'Production mode requires DOMAIN or NEXT_PUBLIC_BASE_URL environment variable'
       );
     }
-    return domain || nextPublicUrl!;
+    return domain || nextPublicUrl || getVercelFallback()!;
   }
 
   // Development mode: Check domain first, then fallback to localhost/IP
@@ -148,7 +161,11 @@ export function getPort(): number | null {
  */
 export function getDomainConfig(): DomainConfig {
   const baseUrl = getBaseUrl();
-  const domain = process.env.DOMAIN || null;
+  const domain =
+    process.env.DOMAIN ||
+    (process.env.VERCEL_URL
+      ? process.env.VERCEL_URL.replace(/^https?:\/\//, "")
+      : null);
   
   return {
     baseUrl,
@@ -232,10 +249,10 @@ export function validateDomainConfig(): void {
     
     // Production mode: MUST have domain, NO localhost fallback
     if (config.isProduction) {
-      if (!config.domain) {
-        throw new Error('Production mode requires DOMAIN environment variable. Localhost/IP fallback is not allowed in production.');
+      if (!config.domain && !process.env.NEXT_PUBLIC_BASE_URL && !process.env.VERCEL_URL) {
+        throw new Error('Production mode requires DOMAIN or NEXT_PUBLIC_BASE_URL environment variable. Localhost/IP fallback is not allowed in production.');
       }
-      
+
       // Ensure production URL is not localhost
       const baseUrl = config.baseUrl.toLowerCase();
       if (baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1') || baseUrl.includes('0.0.0.0')) {
