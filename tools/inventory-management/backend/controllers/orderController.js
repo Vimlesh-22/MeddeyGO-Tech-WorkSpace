@@ -2305,6 +2305,13 @@ const processOrderItems = asyncHandler(async (req, res) => {
         comments: Array.isArray(itemDoc.comments) ? itemDoc.comments.map(c => ({ text: c.text, createdAt: c.createdAt })) : []
       };
 
+      // Capture timestamp for synchronization
+      const processedTimestamp = new Date();
+      
+      // Set processed metadata on the new item
+      newItem.processed = true;
+      newItem.processedAt = processedTimestamp;
+
       targetProcessedOrder.items.push(newItem);
       // Remove from original order
       order.items.pull(itemDoc._id);
@@ -2318,9 +2325,9 @@ const processOrderItems = asyncHandler(async (req, res) => {
       
       // Create history record for processed order history
       historyRecords.push({
-        orderId: order._id,
-        orderName: order.orderName || order.shopifyOrderName || 'Unknown Order',
-        shopifyOrderId: order.shopifyOrderId,
+        orderId: targetProcessedOrder._id,
+        orderName: targetProcessedOrder.orderName || targetProcessedOrder.shopifyOrderName || 'Unknown Order',
+        shopifyOrderId: targetProcessedOrder.shopifyOrderId,
         itemSku: itemDoc.sku,
         productName: itemDoc.productName,
         variantName: itemDoc.variantName || '',
@@ -2329,7 +2336,7 @@ const processOrderItems = asyncHandler(async (req, res) => {
         vendorId: vendorId,
         vendorName: vendorName,
         warehouse: itemDoc.warehouse || 'Okhla',
-        processedAt: new Date(),
+        processedAt: processedTimestamp,
         processedBy: 'system'
       });
       
@@ -2541,10 +2548,13 @@ const moveItemsToStage = asyncHandler(async (req, res) => {
       newItem.vendor = unassigned._id;
     }
 
+    // Capture timestamp for synchronization
+    const processedTimestamp = new Date();
+
     // Set processedAt timestamp when moving to Processed stage
     if (targetStage === 'Processed') {
       newItem.processed = true;
-      newItem.processedAt = new Date();
+      newItem.processedAt = processedTimestamp;
     }
 
     targetOrder.items.push(newItem);
@@ -2571,9 +2581,9 @@ const moveItemsToStage = asyncHandler(async (req, res) => {
         }
       } catch {}
       historyRecords.push({
-        orderId: order._id,
-        orderName: order.orderName || order.shopifyOrderName || 'Unknown Order',
-        shopifyOrderId: order.shopifyOrderId,
+        orderId: targetOrder._id,
+        orderName: targetOrder.orderName || targetOrder.shopifyOrderName || 'Unknown Order',
+        shopifyOrderId: targetOrder.shopifyOrderId,
         itemSku: itemDoc.sku,
         productName: itemDoc.productName,
         variantName: itemDoc.variantName || '',
@@ -2582,7 +2592,7 @@ const moveItemsToStage = asyncHandler(async (req, res) => {
         vendorId: vId,
         vendorName: vName,
         warehouse: itemDoc.warehouse || 'Okhla',
-        processedAt: new Date(),
+        processedAt: processedTimestamp,
         processedBy: 'system'
       });
     }
@@ -4742,7 +4752,7 @@ const updateOrderItem = asyncHandler(async (req, res) => {
       const ProcessedOrderHistory = require('../models/ProcessedOrderHistory');
       const Vendor = require('../models/Vendor');
       
-      // Find matching history record by orderId, itemSku, and processedAt timestamp
+      // Find matching history record
       const historyQuery = {
         orderId: order._id,
         itemSku: item.sku,
