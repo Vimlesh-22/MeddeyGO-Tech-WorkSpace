@@ -1,3 +1,4 @@
+import { put } from "@vercel/blob";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { randomUUID } from "crypto";
@@ -57,13 +58,48 @@ export async function saveUploadedFile(
     throw new Error(validation.error);
   }
 
-  // Create upload directory structure
-  const uploadDir = join(process.cwd(), "public", "uploads", type);
-  await mkdir(uploadDir, { recursive: true });
+  const storageStrategy =
+    process.env.FILE_STORAGE_STRATEGY?.toLowerCase() ||
+    (process.env.VERCEL ? "blob" : "local");
+  const useBlobStorage = storageStrategy === "blob";
 
   // Generate unique filename
   const fileExt = file.name.split(".").pop() || "";
-  const fileName = `${randomUUID()}.${fileExt}`;
+  const fileName = `${randomUUID()}${fileExt ? `.${fileExt}` : ""}`;
+
+  if (useBlobStorage) {
+    const blobToken =
+      process.env.BLOB_READ_WRITE_TOKEN ||
+      process.env.BLOB_TOKEN ||
+      process.env.BLOB_RW_TOKEN;
+
+    if (!blobToken) {
+      throw new Error(
+        "Blob storage enabled but BLOB_READ_WRITE_TOKEN is not configured. Set FILE_STORAGE_STRATEGY=local to store files on disk during development."
+      );
+    }
+
+    const blobPath = `uploads/${type}/${fileName}`;
+    const blob = await put(blobPath, file, {
+      access: "public",
+      contentType: file.type,
+      token: blobToken,
+      addRandomSuffix: false,
+    });
+
+    return {
+      fileName,
+      filePath: blob.pathname,
+      fileUrl: blob.url,
+      fileSize: file.size,
+      mimeType: file.type,
+    };
+  }
+
+  // Local filesystem fallback for development environments
+  const uploadDir = join(process.cwd(), "public", "uploads", type);
+  await mkdir(uploadDir, { recursive: true });
+
   const filePath = join(uploadDir, fileName);
 
   // Convert File to Buffer and save

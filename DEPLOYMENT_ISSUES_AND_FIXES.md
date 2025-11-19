@@ -255,6 +255,31 @@ Require stack:
 
 ---
 
+## Issue 12: Media Library Uploads Failing on Vercel
+
+**Error:**
+```
+ENOENT: no such file or directory, mkdir '/var/task/public'
+```
+
+**Root Cause:**
+Vercel serverless functions run on read-only filesystems, so attempts to create `/public/uploads` for Media Library assets crashed when the upload route called `mkdir`.
+
+**Fix:**
+- Added Vercel Blob storage support in `saveUploadedFile` with automatic blob fallback on Vercel
+- Introduced `FILE_STORAGE_STRATEGY` env to choose between `local` (dev) and `blob` (production)
+- Documented `BLOB_READ_WRITE_TOKEN` requirement in `.env.example`
+
+**Files Modified:**
+- `src/lib/storage/upload.ts`
+- `.env.example`
+- `package.json`
+- `package-lock.json`
+
+**Commit:** _pending_
+
+---
+
 ## Key Lessons Learned
 
 1. **Vercel Root Directory:** For single Next.js apps, leave Root Directory empty in dashboard settings
