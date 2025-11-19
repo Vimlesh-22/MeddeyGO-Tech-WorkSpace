@@ -230,6 +230,31 @@ Unable to send OTP
 
 ---
 
+## Issue 11: Missing Tailwind PostCSS Plugin During Build
+
+**Error:**
+```
+Error: Cannot find module '@tailwindcss/postcss'
+Require stack:
+- /vercel/path0/node_modules/next/dist/build/webpack/config/blocks/css/plugins.js
+...
+```
+
+**Root Cause:**
+`@tailwindcss/postcss` was listed in `devDependencies`, so Vercel (with production installs) skipped it and the Next.js build failed while loading PostCSS plugins.
+
+**Fix:**
+- Moved `@tailwindcss/postcss` to `dependencies` so it is installed in production
+- Regenerated `package-lock.json` to capture the dependency change
+
+**Files Modified:**
+- `package.json`
+- `package-lock.json`
+
+**Commit:** _pending_
+
+---
+
 ## Key Lessons Learned
 
 1. **Vercel Root Directory:** For single Next.js apps, leave Root Directory empty in dashboard settings
