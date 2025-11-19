@@ -10,8 +10,6 @@
     "dev:gsheet": "node scripts/start-gsheet.js",
     "start:comprehensive": "node scripts/start-comprehensive.js",
     "start:quick": "node scripts/quick-start.js",
-    "setup:all": "npm run setup:projecthub && npm run integrate:projecthub",
-    "integrate:projecthub": "node scripts/integrate-projecthub.js",
     "build": "next build",
     "build:hub-only": "next build",
     "start": "next start -p 4090",
