@@ -15,7 +15,7 @@ const companyNamesEnv = process.env.GSHEET_COMPANY_NAMES || 'Meddeygo,Medansh,Me
 const COMPANY_NAMES = companyNamesEnv.split(',').map(name => name.trim()).filter(name => name);
 
 // Google Credentials - prefer env vars, fallback to file
-const { getGoogleCredentials } = require('../../_shared/utils/googleCredentials');
+const { getGoogleCredentials } = require('../../../_shared/utils/googleCredentials');
 let GOOGLE_CREDENTIALS;
 let CREDENTIALS_FILE;
 

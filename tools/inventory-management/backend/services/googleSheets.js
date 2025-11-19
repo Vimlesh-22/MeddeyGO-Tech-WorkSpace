@@ -1,7 +1,7 @@
 const { google } = require('googleapis');
 const fs = require('fs');
 const path = require('path');
-const { getGoogleCredentials } = require('../../_shared/utils/googleCredentials');
+const { getGoogleCredentials } = require('../../../_shared/utils/googleCredentials');
 
 // Ensure env is loaded even if this module is required before server.js
 try {
