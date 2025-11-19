@@ -28,7 +28,7 @@
     "cleanup:uploads": "node scripts/cleanup-uploads.mjs",
     "cleanup:logs": "node scripts/cleanup-logs.js",
     "cleanup:all": "npm run cleanup:uploads && npm run cleanup:logs",
-    "postinstall": "npm run install:python-deps && npm run setup:projecthub",
+    "postinstall": "echo 'Installation complete - skipping Python deps and projecthub setup'",
     "install:python-deps": "pip install -r requirements.txt",
     "setup:projecthub": "cd projecthub && npm link"
   },
