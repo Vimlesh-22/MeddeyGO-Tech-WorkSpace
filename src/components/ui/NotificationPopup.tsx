@@ -195,6 +195,8 @@ interface NotificationContainerProps {
   maxNotifications?: number;
 }
 
+import { useSession } from "@/contexts/SessionContext";
+
 export function NotificationContainer({ 
   position = "top-right", 
   autoDismiss = 10000, // 10 seconds default
@@ -202,13 +204,14 @@ export function NotificationContainer({
 }: NotificationContainerProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isClient, setIsClient] = useState(false);
+  const { user } = useSession();
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
-    if (!isClient) return;
+    if (!isClient || !user) return;
 
     // Load notifications from API
     loadNotifications();
@@ -217,7 +220,7 @@ export function NotificationContainer({
     const interval = setInterval(loadNotifications, 30000); // Check every 30 seconds
     
     return () => clearInterval(interval);
-  }, [isClient]);
+  }, [isClient, user]);
 
   const loadNotifications = async () => {
     const run = async (attempt = 1): Promise<void> => {
